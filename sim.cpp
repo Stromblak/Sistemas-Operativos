@@ -69,7 +69,7 @@ int hebra_E(int h){
             // cuando un proceso no termina en el tiempo establecido, es agregado a la runqueue expirada con una prioridad inferior 
             // y con un nuevo tiempo de ejecución
             if (tiempo[proceso] > quantum){ 
-				tiempo[proceso] = a + rng() % b; // También si un proceso tiene tiempo de ejecución inferior no significa que ese tiempo "sobrante" se acumule. 
+				tiempo[proceso] = a + rng() % b; // si un proceso tiene tiempo de ejecución inferior no significa que ese tiempo "sobrante" se acumule. 
 				int nuevaPrioridad = defPrioridad(cola, tiempo[proceso]);
 				
             	locks[expirada][nuevaPrioridad].lock();
