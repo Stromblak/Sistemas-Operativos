@@ -57,9 +57,12 @@ int hebra_E(int h){
         if (!runqueue[activa][cola].empty()){
             int proceso = runqueue[activa][cola].front();
             runqueue[activa][cola].pop();
-            cout << "CPU " << h << ", Proceso " << proceso << " ejecutandose" << endl;
             locks[activa][cola].unlock();
 
+			mPrint.lock();
+            cout << "CPU " << h << ", Proceso " << proceso << " ejecutandose" << endl;
+			mPrint.unlock();
+			
             int tiempoEjecucion = min(tiempo[proceso], quantum); // planificador cuenta con un periodo de tiempo (similar a RR) 
             sleep(tiempoEjecucion);
 
@@ -68,17 +71,16 @@ int hebra_E(int h){
             if (tiempo[proceso] > quantum){ 
 				tiempo[proceso] = a + rng() % b; // ????????????????????????? También si un proceso tiene tiempo de ejecución inferior no significa que ese tiempo "sobrante" se acumule. 
 				int nuevaPrioridad = defPrioridad(cola, tiempo[proceso]);
+				
             	locks[expirada][nuevaPrioridad].lock();
                 runqueue[expirada][nuevaPrioridad].push(proceso);
             	locks[expirada][nuevaPrioridad].unlock();
-
             }
             else{
 				mPrint.lock();
-                 cout << "CPU " << h << ", Proceso " << proceso << " finalizado" << endl;
+                cout << "CPU " << h << ", Proceso " << proceso << " finalizado" << endl;
 				mPrint.unlock();
 			}
-			locks[expirada][cola].unlock();
 
         }else{
             locks[activa][cola].unlock();
